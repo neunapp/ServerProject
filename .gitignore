@@ -1,0 +1,13 @@
+# Exclude all .pyc files
+*.pyc
+__pycache__/
+
+# Exclude virtual environments
+venv/
+env/
+
+# Exclude SQLite database files
+*.sqlite3
+
+# Exclude Django migrations folders
+**/migrations/
