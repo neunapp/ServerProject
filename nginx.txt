@@ -1,0 +1,31 @@
+upstream hello_app_server {
+  server unix:/webapps/entorno_name/run/gunicorn.sock fail_timeout=0;
+}
+ 
+server {
+ 
+    listen   80;
+    server_name example.com;
+ 
+    access_log /webapps/entorno_name/logs/nginx-access.log;
+    error_log /webapps/entorno_name/logs/nginx-error.log;
+ 
+    location /static/ {
+        alias   /webapps/entorno_name/static/;
+    }
+    
+    location /media/ {
+        alias   /webapps/entorno_name/media/;
+    }
+ 
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+
+        if (!-f $request_filename) {
+            proxy_pass http://hello_app_server;
+            break;
+        }
+    }
+}
